@@ -253,6 +253,7 @@
   <div class="buttons-row">
     <button class="btn" id="new-btn">Neue Aufgabe</button>
     <button class="btn" id="check-btn">Überprüfen</button>
+    <button class="btn" id="done-btn">Erledigt</button>
   </div>
 
   <div class="feedback" id="feedback"></div>
@@ -294,6 +295,7 @@
 
   const newBtn      = document.getElementById('new-btn');
   const checkBtn    = document.getElementById('check-btn');
+  const doneBtn     = document.getElementById('done-btn');
   const feedbackEl  = document.getElementById('feedback');
 
   const popupOverlay  = document.getElementById('popup-overlay');
@@ -385,7 +387,7 @@
 
     const product = factor1 * factor2;
 
-    taskLine.textContent   = factor1 + ' · ' + factor2;
+    taskLine.textContent    = factor1 + ' · ' + factor2;
     factor1Cell.textContent = factor1 + ' ·';
     displaySecondFactorDigits();
 
@@ -484,8 +486,33 @@
     }
   }
 
+  /* Rückmeldung an LearningView */
+
+  function markDone() {
+    feedbackEl.textContent = 'Aufgabe als erledigt markiert. (LearningView wird informiert, falls eingebunden.)';
+    feedbackEl.className = 'feedback ok';
+
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(
+          {
+            type: 'lv_task_done',
+            status: 'completed',
+            exercise: 'multiplication_2x4',
+            factor1: factor1,
+            factor2: factor2
+          },
+          '*'
+        );
+      }
+    } catch (e) {
+      console.error('Senden an Parent fehlgeschlagen:', e);
+    }
+  }
+
   newBtn.addEventListener('click', generateProblem);
   checkBtn.addEventListener('click', checkSolution);
+  doneBtn.addEventListener('click', markDone);
 
   buildDigitButtons();
   setupInputClicks();
