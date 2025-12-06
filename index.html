@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Schriftliche Multiplikation – 3-stellig × 2-stellig</title>
+  <title>Schriftliche Multiplikation – 2-stellig × 4-stellig</title>
   <style>
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
@@ -20,7 +20,7 @@
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       padding: 2rem 2.5rem;
-      max-width: 480px;
+      max-width: 520px;
       width: 100%;
       box-sizing: border-box;
     }
@@ -32,8 +32,15 @@
     .subtitle {
       text-align: center;
       color: #4b5563;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       font-size: 0.9rem;
+    }
+
+    .task-line {
+      text-align: center;
+      font-size: 1.8rem;   /* größer wie gewünscht */
+      font-weight: 700;
+      margin-bottom: 0.6rem;
     }
 
     .layout {
@@ -41,25 +48,23 @@
       grid-template-columns: auto repeat(6, 2.4rem);
       gap: 0.12rem;
       align-items: center;
+      justify-content: center;
     }
-    .task-digit {
+    .label-cell {
+      text-align: right;
+      padding-right: 0.3rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    .digit-cell {
       text-align: center;
-      font-size: 1.4rem;
-      font-weight: 600;
+      font-size: 1.2rem;
       min-height: 2rem;
     }
-    .op-cell-empty {
-      min-width: 2rem;
+    .factor-digit {
+      font-size: 1.3rem;
+      font-weight: 600;
     }
-
-    .place-label {
-      font-weight: 700;
-      font-size: 0.8rem;
-    }
-    .t { color: #22c55e; }
-    .h { color: #ef4444; }
-    .z { color: #3b82f6; }
-    .e { color: #22c55e; }
 
     .input-digit {
       width: 2.1rem;
@@ -79,7 +84,6 @@
       border-color: #b91c1c;
       background: #fee2e2;
     }
-
     .carry-input {
       width: 1.25rem;
       height: 1rem;
@@ -90,69 +94,118 @@
 
     .line-row {
       grid-column: 1 / span 7;
-      border-bottom: 2px solid #111;
+      border-bottom: 2px solid #111827;
       margin: 0.15rem 0;
     }
 
     .buttons-row {
       margin-top: 1.2rem;
-      display:flex;
-      gap:0.5rem;
-      justify-content:center;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     .btn {
-      padding:0.45rem 1.1rem;
-      border-radius:999px;
-      background:#f9fafb;
-      border:1px solid #d1d5db;
-      cursor:pointer;
-      font-weight:600;
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .btn:hover {
+      background: #e5e7eb;
+      border-color: #9ca3af;
     }
     .feedback {
-      text-align:center;
-      margin-top:0.4rem;
-      min-height:1.2rem;
-      font-weight:500;
+      text-align: center;
+      margin-top: 0.4rem;
+      min-height: 1.2rem;
+      font-weight: 500;
+      font-size: 0.95rem;
     }
+    .feedback.ok { color: #15803d; }
+    .feedback.error { color: #b91c1c; }
 
     /* Popup */
     .popup-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.35);
-      display:none;
-      align-items:center;
-      justify-content:center;
+      background: rgba(15,23,42,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .popup {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      max-width: 260px;
+      width: 100%;
+    }
+    .popup-title {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+    .digit-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap: 0.3rem;
+      margin-bottom: 0.4rem;
+    }
+    .digit-btn {
+      padding: 0.3rem 0;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+    .digit-btn:hover {
+      background: #e5e7eb;
+    }
+    .popup-footer {
+      text-align: center;
+    }
+    .popup-close {
+      padding: 0.25rem 0.8rem;
+      border-radius: 999px;
+      border: none;
+      background: #e5e7eb;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .popup-close:hover {
+      background: #d1d5db;
     }
   </style>
 </head>
 <body>
 <div class="app">
   <h1>Schriftliche Multiplikation</h1>
-  <div class="subtitle">3-stelliger Faktor × 2-stelliger Faktor</div>
+  <div class="subtitle">2-stelliger Faktor × 4-stelliger Faktor</div>
 
+  <!-- Aufgabe groß in einer Zeile -->
+  <div class="task-line" id="task-line"></div>
+
+  <!-- Raster mit zweitem Faktor oben über den Kästchen -->
   <div class="layout">
+    <!-- Zeile 1: Ziffern des zweiten Faktors (4-stellig), stellengetreu über den Kästchen -->
+    <div class="label-cell"></div>
+    <div class="digit-cell factor-digit" id="f2-0"></div>
+    <div class="digit-cell factor-digit" id="f2-1"></div>
+    <div class="digit-cell factor-digit" id="f2-2"></div>
+    <div class="digit-cell factor-digit" id="f2-3"></div>
+    <div class="digit-cell factor-digit" id="f2-4"></div>
+    <div class="digit-cell factor-digit" id="f2-5"></div>
 
-    <!-- Zeile 1: Ziffern der Aufgabe -->
-    <div></div>
-    <div class="task-digit" id="d0"></div>
-    <div class="task-digit" id="d1"></div>
-    <div class="task-digit" id="d2"></div>
-    <div class="task-digit">·</div>
-    <div class="task-digit" id="d3"></div>
-    <div class="task-digit" id="d4"></div>
-
-    <!-- Zeile 2: Stellenwerte THZE -->
-    <div></div>
-    <div class="task-digit"><span class="place-label t">T</span></div>
-    <div class="task-digit"><span class="place-label h">H</span></div>
-    <div class="task-digit"><span class="place-label z">Z</span></div>
-    <div class="task-digit op-cell-empty"></div>
-    <div class="task-digit"><span class="place-label z">Z</span></div>
-    <div class="task-digit"><span class="place-label e">E</span></div>
-
-    <!-- Zeile 3: Zwischenprodukt 1 -->
-    <div></div>
+    <!-- Zeile 2: Zwischenprodukt 1 (Einserstelle des 1. Faktors) -->
+    <div class="label-cell"></div>
     <input class="input-digit p1" data-col="0" readonly>
     <input class="input-digit p1" data-col="1" readonly>
     <input class="input-digit p1" data-col="2" readonly>
@@ -160,8 +213,8 @@
     <input class="input-digit p1" data-col="4" readonly>
     <input class="input-digit p1" data-col="5" readonly>
 
-    <!-- Zeile 4: Zwischenprodukt 2 -->
-    <div></div>
+    <!-- Zeile 3: Zwischenprodukt 2 (Zehnerstelle – stellenversetzt) -->
+    <div class="label-cell"></div>
     <input class="input-digit p2" data-col="0" readonly>
     <input class="input-digit p2" data-col="1" readonly>
     <input class="input-digit p2" data-col="2" readonly>
@@ -169,8 +222,8 @@
     <input class="input-digit p2" data-col="4" readonly>
     <input class="input-digit p2" data-col="5" readonly>
 
-    <!-- Zeile 5: Behaltezahlen -->
-    <div></div>
+    <!-- Zeile 4: Behaltezahlen der Addition (klein, keine Einerstelle) -->
+    <div class="label-cell"></div>
     <input class="input-digit carry-input c" data-col="0" readonly>
     <input class="input-digit carry-input c" data-col="1" readonly>
     <input class="input-digit carry-input c" data-col="2" readonly>
@@ -178,38 +231,252 @@
     <input class="input-digit carry-input c" data-col="4" readonly>
     <div></div>
 
-    <!-- Linie -->
+    <!-- Strich -->
     <div class="line-row"></div>
 
-    <!-- Ergebnis -->
-    <div></div>
+    <!-- Zeile 5: Endergebnis -->
+    <div class="label-cell"></div>
     <input class="input-digit r" data-col="0" readonly>
     <input class="input-digit r" data-col="1" readonly>
     <input class="input-digit r" data-col="2" readonly>
     <input class="input-digit r" data-col="3" readonly>
     <input class="input-digit r" data-col="4" readonly>
     <input class="input-digit r" data-col="5" readonly>
-
   </div>
 
   <div class="buttons-row">
-    <button class="btn" id="new">Neue Aufgabe</button>
-    <button class="btn" id="check">Überprüfen</button>
+    <button class="btn" id="new-btn">Neue Aufgabe</button>
+    <button class="btn" id="check-btn">Überprüfen</button>
   </div>
 
   <div class="feedback" id="feedback"></div>
 </div>
 
-<!-- Popup generiere ich hier nicht komplett, weil du es schon hast 😉 -->
+<!-- Popup für Ziffernauswahl -->
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup">
+    <div class="popup-title">Ziffer auswählen</div>
+    <div class="digit-grid" id="digit-grid"></div>
+    <div class="popup-footer">
+      <button class="popup-close" id="popup-close-btn">Abbrechen</button>
+    </div>
+  </div>
+</div>
 
 <script>
-/* ——— JavaScript identisch zur letzten Version, außer: ———
-   Die Ziffern werden jetzt in #d0 bis #d4 geschrieben!
-*/
+  const NUM_COLS = 6; // Ergebnis bis 6-stellig (max 999999)
 
-const d = [...Array(5)].map((_,i)=>document.getElementById("d"+i));
-// Rest bleibt gleich:
+  let factor1 = 0;       // 2-stellig
+  let factor2 = 0;       // 4-stellig
+  let partial1Digits = [];
+  let partial2Digits = [];
+  let carryDigits   = [];
+  let resultDigits  = [];
+
+  let activeInput = null;
+
+  const taskLine = document.getElementById('task-line');
+  const f2Cells = [...Array(NUM_COLS)].map((_, i) =>
+    document.getElementById('f2-' + i)
+  );
+
+  const p1Inputs = Array.from(document.querySelectorAll('.p1'));
+  const p2Inputs = Array.from(document.querySelectorAll('.p2'));
+  const carryInputs = Array.from(document.querySelectorAll('.c'));
+  const resInputs = Array.from(document.querySelectorAll('.r'));
+
+  const newBtn = document.getElementById('new-btn');
+  const checkBtn = document.getElementById('check-btn');
+  const feedbackEl = document.getElementById('feedback');
+
+  const popupOverlay = document.getElementById('popup-overlay');
+  const digitGrid = document.getElementById('digit-grid');
+  const popupCloseBtn = document.getElementById('popup-close-btn');
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function digitsOf(num) {
+    const arr = new Array(NUM_COLS).fill(0);
+    let n = Math.floor(Math.abs(num));
+    for (let i = NUM_COLS - 1; i >= 0; i--) {
+      arr[i] = n % 10;
+      n = Math.floor(n / 10);
+    }
+    return arr;
+  }
+
+  function resetInputs() {
+    [...p1Inputs, ...p2Inputs, ...carryInputs, ...resInputs].forEach(inp => {
+      inp.value = '';
+      inp.classList.remove('correct', 'incorrect');
+    });
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+  }
+
+  function buildDigitButtons() {
+    digitGrid.innerHTML = '';
+    for (let d = 0; d <= 9; d++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'digit-btn';
+      btn.textContent = String(d);
+      btn.addEventListener('click', () => {
+        if (activeInput) activeInput.value = String(d);
+        hidePopup();
+      });
+      digitGrid.appendChild(btn);
+    }
+  }
+
+  function showPopupForInput(inputEl) {
+    activeInput = inputEl;
+    popupOverlay.style.display = 'flex';
+  }
+
+  function hidePopup() {
+    popupOverlay.style.display = 'none';
+    activeInput = null;
+  }
+
+  popupCloseBtn.addEventListener('click', hidePopup);
+  popupOverlay.addEventListener('click', (e) => {
+    if (e.target === popupOverlay) hidePopup();
+  });
+
+  function setupInputClicks() {
+    const allInputs = [...p1Inputs, ...p2Inputs, ...carryInputs, ...resInputs];
+    allInputs.forEach(inp => {
+      inp.addEventListener('click', () => {
+        inp.classList.remove('correct', 'incorrect');
+        showPopupForInput(inp);
+      });
+    });
+  }
+
+  function displaySecondFactorDigits() {
+    // Zweiter Faktor ist 4-stellig, soll über den rechten 4 Kästchen stehen.
+    // Spalten 0 und 1 bleiben leer, Spalten 2..5 enthalten Tausender..Einer.
+    const str = factor2.toString().padStart(4, '0');
+    const d = str.split('').map(ch => parseInt(ch, 10));
+    for (let col = 0; col < NUM_COLS; col++) {
+      if (col < 2) {
+        f2Cells[col].textContent = '';
+      } else {
+        f2Cells[col].textContent = d[col - 2];
+      }
+    }
+  }
+
+  function generateProblem() {
+    let product;
+    do {
+      factor1 = randomInt(10, 99);      // zweistellig
+      factor2 = randomInt(1000, 9999);  // vierstellig
+      product = factor1 * factor2;
+    } while (product > 999999); // damit 6-stellig reicht
+
+    taskLine.textContent = factor1 + ' · ' + factor2;
+    displaySecondFactorDigits();
+
+    const ones = factor1 % 10;
+    const tens = Math.floor(factor1 / 10);
+
+    const partial1 = factor2 * ones;
+    const partial2 = factor2 * tens * 10; // Zehnerstelle, um eine Stelle verschoben
+
+    partial1Digits = digitsOf(partial1);
+    partial2Digits = digitsOf(partial2);
+
+    const sum = partial1 + partial2;
+    resultDigits = digitsOf(sum);
+
+    carryDigits = new Array(NUM_COLS).fill(0);
+    let carryIn = 0;
+    for (let i = NUM_COLS - 1; i >= 0; i--) {
+      const s = partial1Digits[i] + partial2Digits[i] + carryIn;
+      const carryOut = Math.floor(s / 10);
+      if (i - 1 >= 0) {
+        carryDigits[i - 1] = carryOut;
+      }
+      carryIn = carryOut;
+    }
+
+    resetInputs();
+  }
+
+  function checkSolution() {
+    let allCorrect = true;
+
+    p1Inputs.forEach(inp => {
+      const col = parseInt(inp.dataset.col, 10);
+      const expected = partial1Digits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
+
+    p2Inputs.forEach(inp => {
+      const col = parseInt(inp.dataset.col, 10);
+      const expected = partial2Digits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
+
+    carryInputs.forEach(inp => {
+      const col = parseInt(inp.dataset.col, 10);
+      const expected = carryDigits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
+
+    resInputs.forEach(inp => {
+      const col = parseInt(inp.dataset.col, 10);
+      const expected = resultDigits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
+
+    if (allCorrect) {
+      feedbackEl.textContent = 'Super, alles korrekt gelöst! 🎉';
+      feedbackEl.className = 'feedback ok';
+    } else {
+      feedbackEl.textContent = 'Einige Ziffern sind noch falsch. Versuche es zu verbessern.';
+      feedbackEl.className = 'feedback error';
+    }
+  }
+
+  newBtn.addEventListener('click', generateProblem);
+  checkBtn.addEventListener('click', checkSolution);
+
+  buildDigitButtons();
+  setupInputClicks();
+  generateProblem();
 </script>
-
 </body>
 </html>
