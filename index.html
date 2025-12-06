@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Schriftliche Multiplikation – 4. Klasse</title>
+  <title>Schriftliche Multiplikation – 3-stellig × 2-stellig</title>
   <style>
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -20,130 +20,57 @@
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       padding: 2rem 2.5rem;
-      max-width: 760px;
+      max-width: 480px;
       width: 100%;
       box-sizing: border-box;
     }
     h1 {
       margin-top: 0;
       text-align: center;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
     }
     .subtitle {
       text-align: center;
       color: #4b5563;
       margin-bottom: 1.2rem;
-      font-size: 0.95rem;
-    }
-    .hidden {
-      display: none;
-    }
-
-    /* Startscreen */
-    .section-title {
-      text-align: center;
-      margin-top: 0.5rem;
-      font-weight: 600;
-      color: #374151;
-    }
-    .mode-buttons {
-      display: flex;
-      gap: 0.6rem;
-      justify-content: center;
-      margin-top: 0.4rem;
-      flex-wrap: wrap;
-    }
-    .mode-btn {
-      padding: 0.6rem 1.4rem;
-      border-radius: 999px;
-      border: 2px solid #d1d5db;
-      background: #f9fafb;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease, box-shadow 0.05s ease;
-    }
-    .mode-btn.selected {
-      background: #2563eb;
-      color: #ffffff;
-      border-color: #1d4ed8;
-      box-shadow: 0 5px 15px rgba(37,99,235,0.35);
-    }
-    .mode-btn:active {
-      transform: translateY(1px);
-    }
-    .start-info {
-      margin-top: 0.8rem;
-      text-align: center;
       font-size: 0.9rem;
-      color: #6b7280;
-      min-height: 1.4rem;
-    }
-    .primary-btn {
-      margin-top: 1rem;
-      width: 100%;
-      padding: 0.6rem 1.4rem;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-      background: #2563eb;
-      color: white;
-      transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.05s ease;
-    }
-    .primary-btn:hover {
-      background: #1d4ed8;
-    }
-    .primary-btn:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-    .primary-btn:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-      box-shadow: none;
     }
 
-    /* Aufgabenlayout */
     .layout {
       display: grid;
-      grid-template-columns: auto repeat(5, 3rem);
-      gap: 0.25rem;
+      grid-template-columns: auto repeat(5, 2.4rem);
+      gap: 0.15rem;
       align-items: center;
       justify-content: center;
-      margin-top: 1rem;
-    }
-    .header-row {
-      grid-column: 1 / span 6;
-      text-align: center;
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
+      margin-top: 0.6rem;
     }
     .label-cell {
       text-align: right;
-      padding-right: 0.5rem;
+      padding-right: 0.3rem;
       font-size: 0.9rem;
       color: #6b7280;
     }
     .digit-cell {
       text-align: center;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       min-height: 2rem;
+    }
+    .digit-static {
+      display: inline-block;
+      min-width: 2rem;
     }
     .line-row {
       grid-column: 1 / span 6;
       border-bottom: 2px solid #111827;
-      margin-top: 0.2rem;
+      margin-top: 0.15rem;
     }
 
     .input-digit {
       width: 2.1rem;
       height: 2.1rem;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 2px solid #d1d5db;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       text-align: center;
       cursor: pointer;
       background: #f9fafb;
@@ -154,10 +81,10 @@
       box-shadow: 0 0 0 2px rgba(37,99,235,0.35);
     }
     .carry-input {
-      width: 1.4rem;
-      height: 1.1rem;
-      font-size: 0.7rem; /* halb so gross */
-      border-radius: 7px;
+      width: 1.3rem;
+      height: 1.0rem;
+      font-size: 0.7rem;
+      border-radius: 6px;
       padding: 0;
     }
     .input-digit.correct {
@@ -170,37 +97,47 @@
     }
 
     .buttons-row {
-      margin-top: 1.5rem;
+      margin-top: 1.2rem;
       display: flex;
       gap: 0.6rem;
       justify-content: center;
       flex-wrap: wrap;
     }
-    .secondary-btn {
-      padding: 0.6rem 1.4rem;
+    .btn {
+      padding: 0.5rem 1.2rem;
       border-radius: 999px;
       border: 1px solid #d1d5db;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       background: #f9fafb;
       color: #111827;
       transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.05s ease, border-color 0.15s ease;
     }
-    .secondary-btn:hover {
+    .btn-primary {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+    }
+    .btn:hover {
       background: #e5e7eb;
       border-color: #9ca3af;
     }
-    .secondary-btn:active {
+    .btn-primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+    .btn:active {
       transform: translateY(1px);
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 
     .feedback {
-      margin-top: 0.8rem;
+      margin-top: 0.6rem;
       text-align: center;
-      min-height: 1.4rem;
+      min-height: 1.2rem;
       font-weight: 500;
+      font-size: 0.95rem;
     }
     .feedback.ok {
       color: #15803d;
@@ -209,7 +146,7 @@
       color: #b91c1c;
     }
 
-    /* Popup-Ziffern-Auswahl */
+    /* Popup */
     .popup-overlay {
       position: fixed;
       inset: 0;
@@ -221,29 +158,30 @@
     }
     .popup {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      padding: 0.8rem 1rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      max-width: 320px;
+      max-width: 260px;
       width: 100%;
     }
     .popup-title {
       text-align: center;
       font-weight: 600;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
     }
     .digit-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 0.4rem;
-      margin-bottom: 0.6rem;
+      gap: 0.3rem;
+      margin-bottom: 0.4rem;
     }
     .digit-btn {
-      padding: 0.4rem 0;
-      border-radius: 10px;
+      padding: 0.3rem 0;
+      border-radius: 8px;
       border: 1px solid #d1d5db;
       background: #f9fafb;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       cursor: pointer;
       transition: background 0.1s ease, transform 0.05s ease;
     }
@@ -257,12 +195,12 @@
       text-align: center;
     }
     .popup-close {
-      padding: 0.3rem 0.9rem;
+      padding: 0.25rem 0.8rem;
       border-radius: 999px;
       border: none;
       background: #e5e7eb;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .popup-close:hover {
       background: #d1d5db;
@@ -273,102 +211,79 @@
 <div class="app">
   <h1>Schriftliche Multiplikation</h1>
   <div class="subtitle">
-    4. Klasse – einstelliger oder zweistelliger Faktor × drei- oder vierstellige Zahl<br>
-    Nur in der obersten Zeile steht die Aufgabe, darunter sind nur Eingabefelder.
+    Dreistellige Zahl · zweistellige Zahl – wie bei matheaufgaben.net<br>
+    Trage die Zwischenprodukte, Behaltezahlen und das Ergebnis ein.
   </div>
 
-  <!-- Start-Bildschirm -->
-  <div id="start-screen">
-    <div class="section-title">Niveau wählen</div>
-    <div class="mode-buttons">
-      <button type="button" class="mode-btn" data-mode="1digit">Einstelliger Faktor</button>
-      <button type="button" class="mode-btn" data-mode="2digit">Zweistelliger Faktor</button>
-    </div>
-    <div class="start-info" id="start-info">
-      Bitte ein Niveau auswählen.
-    </div>
-    <button class="primary-btn" id="start-btn" disabled>Los!</button>
+  <div class="layout">
+    <!-- Zeile 1: Faktoren untereinander -->
+    <div class="label-cell"></div>
+    <div class="digit-cell"><span class="digit-static" id="op1-0"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op1-1"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op1-2"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op1-3"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op1-4"></span></div>
+
+    <div class="label-cell">·</div>
+    <div class="digit-cell"><span class="digit-static" id="op2-0"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op2-1"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op2-2"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op2-3"></span></div>
+    <div class="digit-cell"><span class="digit-static" id="op2-4"></span></div>
+
+    <!-- Strich über den Zwischenprodukten -->
+    <div class="line-row"></div>
+
+    <!-- Zeile 3: Zwischenprodukt (Einserstelle des Faktors) -->
+    <div class="label-cell"></div>
+    <div class="digit-cell"><input class="input-digit p1-input" data-col="0" readonly></div>
+    <div class="digit-cell"><input class="input-digit p1-input" data-col="1" readonly></div>
+    <div class="digit-cell"><input class="input-digit p1-input" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit p1-input" data-col="3" readonly></div>
+    <div class="digit-cell"><input class="input-digit p1-input" data-col="4" readonly></div>
+
+    <!-- Zeile 4: Zwischenprodukt (Zehnerstelle, um eine Stelle nach links versetzt) -->
+    <div class="label-cell"></div>
+    <div class="digit-cell"><input class="input-digit p2-input" data-col="0" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2-input" data-col="1" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2-input" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2-input" data-col="3" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2-input" data-col="4" readonly></div>
+
+    <!-- Zeile 5: Behaltezahlen der Addition (klein, keine Einerstelle) -->
+    <div class="label-cell"></div>
+    <div class="digit-cell"><input class="input-digit carry-input" data-col="0" readonly></div>
+    <div class="digit-cell"><input class="input-digit carry-input" data-col="1" readonly></div>
+    <div class="digit-cell"><input class="input-digit carry-input" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit carry-input" data-col="3" readonly></div>
+    <div class="digit-cell"><!-- keine Behalte bei Einern --></div>
+
+    <!-- Strich über dem Endergebnis -->
+    <div class="line-row"></div>
+
+    <!-- Zeile 6: Endergebnis -->
+    <div class="label-cell"></div>
+    <div class="digit-cell"><input class="input-digit res-input" data-col="0" readonly></div>
+    <div class="digit-cell"><input class="input-digit res-input" data-col="1" readonly></div>
+    <div class="digit-cell"><input class="input-digit res-input" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit res-input" data-col="3" readonly></div>
+    <div class="digit-cell"><input class="input-digit res-input" data-col="4" readonly></div>
   </div>
 
-  <!-- Aufgaben-Bildschirm -->
-  <div id="exercise-screen" class="hidden">
-    <div id="mode-text"
-         style="text-align:center; font-size:0.95rem; color:#4b5563; margin-bottom:0.4rem;">
-    </div>
-
-    <!-- Layout: einstelliger Faktor -->
-    <div id="layout-1digit" class="layout hidden">
-      <!-- Zeile 1: Aufgabe -->
-      <div class="header-row" id="header-1digit"></div>
-
-      <!-- Zeile 2: Endergebnis (nur Eingabefelder) -->
-      <div class="label-cell"></div>
-      <div class="digit-cell"><input class="input-digit res1-input" data-col="0" readonly></div>
-      <div class="digit-cell"><input class="input-digit res1-input" data-col="1" readonly></div>
-      <div class="digit-cell"><input class="input-digit res1-input" data-col="2" readonly></div>
-      <div class="digit-cell"><input class="input-digit res1-input" data-col="3" readonly></div>
-      <div class="digit-cell"><input class="input-digit res1-input" data-col="4" readonly></div>
-    </div>
-
-    <!-- Layout: zweistelliger Faktor -->
-    <div id="layout-2digit" class="layout hidden">
-      <!-- Zeile 1: Aufgabe -->
-      <div class="header-row" id="header-2digit"></div>
-
-      <!-- Zeile 2: erstes Zwischenprodukt (Einserstelle) -->
-      <div class="label-cell"></div>
-      <div class="digit-cell"><input class="input-digit p1-input" data-col="0" readonly></div>
-      <div class="digit-cell"><input class="input-digit p1-input" data-col="1" readonly></div>
-      <div class="digit-cell"><input class="input-digit p1-input" data-col="2" readonly></div>
-      <div class="digit-cell"><input class="input-digit p1-input" data-col="3" readonly></div>
-      <div class="digit-cell"><input class="input-digit p1-input" data-col="4" readonly></div>
-
-      <!-- Zeile 3: zweites Zwischenprodukt (Zehnerstelle, stellenversetzt) -->
-      <div class="label-cell"></div>
-      <div class="digit-cell"><input class="input-digit p2-input" data-col="0" readonly></div>
-      <div class="digit-cell"><input class="input-digit p2-input" data-col="1" readonly></div>
-      <div class="digit-cell"><input class="input-digit p2-input" data-col="2" readonly></div>
-      <div class="digit-cell"><input class="input-digit p2-input" data-col="3" readonly></div>
-      <div class="digit-cell"><input class="input-digit p2-input" data-col="4" readonly></div>
-
-      <!-- Zeile 4: Behaltezahlen für Addition (klein, keine Einerstelle) -->
-      <div class="label-cell"></div>
-      <div class="digit-cell"><input class="input-digit carry-input" data-col="0" readonly></div>
-      <div class="digit-cell"><input class="input-digit carry-input" data-col="1" readonly></div>
-      <div class="digit-cell"><input class="input-digit carry-input" data-col="2" readonly></div>
-      <div class="digit-cell"><input class="input-digit carry-input" data-col="3" readonly></div>
-      <div class="digit-cell"><!-- keine Behalte bei Einern --></div>
-
-      <!-- Rechenstrich -->
-      <div class="line-row"></div>
-
-      <!-- Zeile 5: Endergebnis (Summe der Zwischenprodukte) -->
-      <div class="label-cell"></div>
-      <div class="digit-cell"><input class="input-digit res2-input" data-col="0" readonly></div>
-      <div class="digit-cell"><input class="input-digit res2-input" data-col="1" readonly></div>
-      <div class="digit-cell"><input class="input-digit res2-input" data-col="2" readonly></div>
-      <div class="digit-cell"><input class="input-digit res2-input" data-col="3" readonly></div>
-      <div class="digit-cell"><input class="input-digit res2-input" data-col="4" readonly></div>
-    </div>
-
-    <div class="buttons-row">
-      <button class="secondary-btn" id="new-btn">Neue Aufgabe</button>
-      <button class="secondary-btn" id="check-btn">Überprüfen</button>
-      <button class="secondary-btn" id="done-btn">Erledigt</button>
-      <button class="secondary-btn" id="back-btn">Zurück zur Auswahl</button>
-    </div>
-
-    <div class="feedback" id="feedback"></div>
+  <div class="buttons-row">
+    <button class="btn" id="new-btn">Neue Aufgabe</button>
+    <button class="btn" id="check-btn">Überprüfen</button>
+    <button class="btn" id="done-btn">Erledigt</button>
   </div>
+
+  <div class="feedback" id="feedback"></div>
 </div>
 
-<!-- Popup für Ziffernauswahl -->
+<!-- Popup -->
 <div class="popup-overlay" id="popup-overlay">
   <div class="popup">
     <div class="popup-title">Ziffer auswählen</div>
-    <div class="digit-grid" id="digit-grid">
-      <!-- Ziffern-Buttons werden per JS erzeugt -->
-    </div>
+    <div class="digit-grid" id="digit-grid"></div>
     <div class="popup-footer">
       <button class="popup-close" id="popup-close-btn">Abbrechen</button>
     </div>
@@ -376,92 +291,81 @@
 </div>
 
 <script>
-  const NUM_COLS = 5; // Zehntausender bis Einer, Ergebnis < 20001
+  const NUM_COLS = 5; // wir begrenzen auf fünf Stellen (bis 19999)
 
-  let factorMode = null;   // '1digit' oder '2digit'
-  let smallFactor = 0;     // einstelliger oder zweistelliger Faktor
-  let bigFactor = 0;       // 3- oder 4-stellige Zahl
-
+  let factor1 = 0;       // dreistellig
+  let factor2 = 0;       // zweistellig
+  let partial1Digits = [];
+  let partial2Digits = [];
+  let carryDigits = [];  // Behaltezahlen Addition
   let resultDigits = [];
-  let carryDigits = [];    // Behalte (nur bei 2digit)
-  let partial1Digits = []; // Zwischenprodukt Einserstelle
-  let partial2Digits = []; // Zwischenprodukt Zehnerstelle (stellenversetzt)
 
   let activeInput = null;
 
-  // Startscreen-Elemente
-  const startScreen = document.getElementById('start-screen');
-  const exerciseScreen = document.getElementById('exercise-screen');
-  const startBtn = document.getElementById('start-btn');
-  const startInfo = document.getElementById('start-info');
-  const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
+  const op1Spans = [...Array(NUM_COLS)].map((_, i) =>
+    document.getElementById('op1-' + i)
+  );
+  const op2Spans = [...Array(NUM_COLS)].map((_, i) =>
+    document.getElementById('op2-' + i)
+  );
 
-  // Info-Text
-  const modeText = document.getElementById('mode-text');
-
-  // Layouts
-  const layout1 = document.getElementById('layout-1digit');
-  const layout2 = document.getElementById('layout-2digit');
-  const header1 = document.getElementById('header-1digit');
-  const header2 = document.getElementById('header-2digit');
-
-  // Eingabefelder
-  const res1Inputs = Array.from(document.querySelectorAll('.res1-input'));
-  const p1Inputs   = Array.from(document.querySelectorAll('.p1-input'));
-  const p2Inputs   = Array.from(document.querySelectorAll('.p2-input'));
+  const p1Inputs = Array.from(document.querySelectorAll('.p1-input'));
+  const p2Inputs = Array.from(document.querySelectorAll('.p2-input'));
   const carryInputs = Array.from(document.querySelectorAll('.carry-input'));
-  const res2Inputs = Array.from(document.querySelectorAll('.res2-input'));
+  const resInputs = Array.from(document.querySelectorAll('.res-input'));
 
   const newBtn = document.getElementById('new-btn');
   const checkBtn = document.getElementById('check-btn');
   const doneBtn = document.getElementById('done-btn');
-  const backBtn = document.getElementById('back-btn');
   const feedbackEl = document.getElementById('feedback');
 
-  // Popup
   const popupOverlay = document.getElementById('popup-overlay');
   const digitGrid = document.getElementById('digit-grid');
   const popupCloseBtn = document.getElementById('popup-close-btn');
 
-  /* --- Start-Auswahl --- */
+  /* Hilfsfunktionen */
 
-  modeButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      factorMode = btn.getAttribute('data-mode');
-      modeButtons.forEach(b => b.classList.toggle('selected', b === btn));
-      updateStartState();
-    });
-  });
-
-  function updateStartState() {
-    if (!factorMode) {
-      startInfo.textContent = 'Bitte ein Niveau auswählen.';
-      startBtn.disabled = true;
-      return;
-    }
-    if (factorMode === '1digit') {
-      startInfo.textContent = 'Einstelliger Faktor · drei- oder vierstellige Zahl – nur Endergebnis eintragen.';
-    } else {
-      startInfo.textContent = 'Zweistelliger Faktor · drei- oder vierstellige Zahl – zwei Zwischenprodukte, dann Behalte und Endergebnis.';
-    }
-    startBtn.disabled = false;
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  startBtn.addEventListener('click', () => {
-    if (!factorMode) return;
-    startScreen.classList.add('hidden');
-    exerciseScreen.classList.remove('hidden');
-    generateProblem();
-  });
+  function digitsOf(num) {
+    const arr = new Array(NUM_COLS).fill(0);
+    let n = Math.floor(Math.abs(num));
+    for (let i = NUM_COLS - 1; i >= 0; i--) {
+      arr[i] = n % 10;
+      n = Math.floor(n / 10);
+    }
+    return arr;
+  }
 
-  backBtn.addEventListener('click', () => {
-    exerciseScreen.classList.add('hidden');
-    startScreen.classList.remove('hidden');
+  function digitsCount(num) {
+    if (num === 0) return 1;
+    let n = Math.floor(Math.abs(num));
+    let c = 0;
+    while (n > 0) { n = Math.floor(n / 10); c++; }
+    return c;
+  }
+
+  function displayStaticDigits(spans, digits, numberValue) {
+    for (let i = 0; i < NUM_COLS; i++) {
+      const isLeadingZero =
+        digits[i] === 0 && i < NUM_COLS - digitsCount(numberValue);
+      spans[i].textContent = isLeadingZero ? '' : digits[i];
+    }
+  }
+
+  function resetInputs() {
+    const all = [...p1Inputs, ...p2Inputs, ...carryInputs, ...resInputs];
+    all.forEach(inp => {
+      inp.value = '';
+      inp.classList.remove('correct', 'incorrect');
+    });
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
-  });
+  }
 
-  /* --- Popup für Ziffern --- */
+  /* Popup */
 
   function buildDigitButtons() {
     digitGrid.innerHTML = '';
@@ -473,7 +377,6 @@
       btn.addEventListener('click', () => {
         if (activeInput) {
           activeInput.value = String(d);
-          activeInput.focus();
         }
         hidePopup();
       });
@@ -493,13 +396,11 @@
 
   popupCloseBtn.addEventListener('click', hidePopup);
   popupOverlay.addEventListener('click', (e) => {
-    if (e.target === popupOverlay) {
-      hidePopup();
-    }
+    if (e.target === popupOverlay) hidePopup();
   });
 
   function setupInputClicks() {
-    const allInputs = Array.from(document.querySelectorAll('.input-digit'));
+    const allInputs = [...p1Inputs, ...p2Inputs, ...carryInputs, ...resInputs];
     allInputs.forEach(inp => {
       inp.addEventListener('click', () => {
         inp.classList.remove('correct', 'incorrect');
@@ -508,81 +409,27 @@
     });
   }
 
-  /* --- Hilfsfunktionen --- */
-
-  function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function digitsOf(num) {
-    const arr = new Array(NUM_COLS).fill(0);
-    let n = Math.floor(Math.abs(num));
-    for (let i = NUM_COLS - 1; i >= 0; i--) {
-      arr[i] = n % 10;
-      n = Math.floor(n / 10);
-    }
-    return arr;
-  }
-
-  function resetAllInputs() {
-    const allInputs = Array.from(document.querySelectorAll('.input-digit'));
-    allInputs.forEach(inp => {
-      inp.value = '';
-      inp.classList.remove('correct', 'incorrect');
-    });
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-  }
-
-  /* --- Aufgaben-Generierung --- */
+  /* Aufgaben-Generierung */
 
   function generateProblem() {
-    if (factorMode === '1digit') {
-      generateOneDigitProblem();
-    } else {
-      generateTwoDigitProblem();
-    }
-  }
-
-  function generateOneDigitProblem() {
-    modeText.textContent = 'Schriftliche Multiplikation mit einem einstelligen Faktor (ohne Behaltezahlen).';
-    layout1.classList.remove('hidden');
-    layout2.classList.add('hidden');
-
     let product;
     do {
-      smallFactor = randomInt(2, 9);      // einstelliger Faktor
-      bigFactor = randomInt(100, 9999);  // 3–4-stellige Zahl
-      product = smallFactor * bigFactor;
-    } while (product > 20000);
+      factor1 = randomInt(100, 999);  // dreistellig
+      factor2 = randomInt(10, 99);    // zweistellig
+      product = factor1 * factor2;
+    } while (product > 19999);
 
-    header1.textContent = smallFactor + ' · ' + bigFactor;
+    const d1 = digitsOf(factor1);
+    const d2 = digitsOf(factor2);
 
-    resultDigits = digitsOf(product);
-    carryDigits = new Array(NUM_COLS).fill(0); // wird nicht verwendet
+    displayStaticDigits(op1Spans, d1, factor1);
+    displayStaticDigits(op2Spans, d2, factor2);
 
-    resetAllInputs();
-  }
+    const ones = factor2 % 10;
+    const tens = Math.floor(factor2 / 10);
 
-  function generateTwoDigitProblem() {
-    modeText.textContent = 'Schriftliche Multiplikation mit einem zweistelligen Faktor (zwei Zwischenprodukte, dann Addition).';
-    layout1.classList.add('hidden');
-    layout2.classList.remove('hidden');
-
-    let product;
-    do {
-      smallFactor = randomInt(10, 99);       // zweistellig
-      bigFactor = randomInt(100, 9999);      // 3–4-stellig
-      product = smallFactor * bigFactor;
-    } while (product > 20000);
-
-    header2.textContent = smallFactor + ' · ' + bigFactor;
-
-    const ones = smallFactor % 10;
-    const tens = Math.floor(smallFactor / 10);
-
-    const partial1 = bigFactor * ones;
-    const partial2 = bigFactor * tens * 10;  // bereits stellenversetzt
+    const partial1 = factor1 * ones;
+    const partial2 = factor1 * tens * 10;
 
     partial1Digits = digitsOf(partial1);
     partial2Digits = digitsOf(partial2);
@@ -590,106 +437,87 @@
     const sum = partial1 + partial2;
     resultDigits = digitsOf(sum);
 
-    // Behaltezahlen für die Addition der beiden Zwischenprodukte
+    // Behaltezahlen der Addition
     carryDigits = new Array(NUM_COLS).fill(0);
     let carryIn = 0;
     for (let i = NUM_COLS - 1; i >= 0; i--) {
       const s = partial1Digits[i] + partial2Digits[i] + carryIn;
       const digit = s % 10;
       const carryOut = Math.floor(s / 10);
-      resultDigits[i] = digitsOf(sum)[i]; // Sicher gehen
+      resultDigits[i] = digitsOf(sum)[i];
       if (i - 1 >= 0) {
         carryDigits[i - 1] = carryOut;
       }
       carryIn = carryOut;
     }
 
-    resetAllInputs();
+    resetInputs();
   }
 
-  /* --- Lösung prüfen --- */
+  /* Lösung prüfen */
 
   function checkSolution() {
     let allCorrect = true;
 
-    if (factorMode === '1digit') {
-      // Nur Ergebnis-Reihe wird geprüft
-      res1Inputs.forEach(inp => {
-        const col = parseInt(inp.getAttribute('data-col'), 10);
-        const expected = resultDigits[col];
-        const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+    // Zwischenprodukt 1
+    p1Inputs.forEach(inp => {
+      const col = parseInt(inp.getAttribute('data-col'), 10);
+      const expected = partial1Digits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
 
-        inp.classList.remove('correct', 'incorrect');
-        if (value === expected) {
-          inp.classList.add('correct');
-        } else {
-          inp.classList.add('incorrect');
-          allCorrect = false;
-        }
-      });
-    } else {
-      // Zweistelliger Faktor: Zwischenprodukte, Behalte, Endergebnis
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
 
-      // p1 (Einser-Zwischenprodukt)
-      p1Inputs.forEach(inp => {
-        const col = parseInt(inp.getAttribute('data-col'), 10);
-        const expected = partial1Digits[col];
-        const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+    // Zwischenprodukt 2
+    p2Inputs.forEach(inp => {
+      const col = parseInt(inp.getAttribute('data-col'), 10);
+      const expected = partial2Digits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
 
-        inp.classList.remove('correct', 'incorrect');
-        if (value === expected) {
-          inp.classList.add('correct');
-        } else {
-          inp.classList.add('incorrect');
-          allCorrect = false;
-        }
-      });
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
 
-      // p2 (Zehner-Zwischenprodukt)
-      p2Inputs.forEach(inp => {
-        const col = parseInt(inp.getAttribute('data-col'), 10);
-        const expected = partial2Digits[col];
-        const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+    // Behaltezahlen Addition
+    carryInputs.forEach(inp => {
+      const col = parseInt(inp.getAttribute('data-col'), 10);
+      const expected = carryDigits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
 
-        inp.classList.remove('correct', 'incorrect');
-        if (value === expected) {
-          inp.classList.add('correct');
-        } else {
-          inp.classList.add('incorrect');
-          allCorrect = false;
-        }
-      });
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
 
-      // Behaltezahlen (Addition der Zwischenprodukte), leeres Feld = 0
-      carryInputs.forEach(inp => {
-        const col = parseInt(inp.getAttribute('data-col'), 10);
-        const expected = carryDigits[col];
-        const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
+    // Endergebnis
+    resInputs.forEach(inp => {
+      const col = parseInt(inp.getAttribute('data-col'), 10);
+      const expected = resultDigits[col];
+      const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
 
-        inp.classList.remove('correct', 'incorrect');
-        if (value === expected) {
-          inp.classList.add('correct');
-        } else {
-          inp.classList.add('incorrect');
-          allCorrect = false;
-        }
-      });
-
-      // Endergebnis
-      res2Inputs.forEach(inp => {
-        const col = parseInt(inp.getAttribute('data-col'), 10);
-        const expected = resultDigits[col];
-        const value = inp.value === '' ? 0 : parseInt(inp.value, 10);
-
-        inp.classList.remove('correct', 'incorrect');
-        if (value === expected) {
-          inp.classList.add('correct');
-        } else {
-          inp.classList.add('incorrect');
-          allCorrect = false;
-        }
-      });
-    }
+      inp.classList.remove('correct', 'incorrect');
+      if (value === expected) {
+        inp.classList.add('correct');
+      } else {
+        inp.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
 
     if (allCorrect) {
       feedbackEl.textContent = 'Super, alles korrekt gelöst! 🎉';
@@ -700,7 +528,7 @@
     }
   }
 
-  /* --- "Erledigt" an LearningView melden --- */
+  /* Erledigt an LearningView melden */
 
   function markDone() {
     feedbackEl.textContent = 'Aufgabe als erledigt markiert. (LearningView wird informiert, falls eingebunden.)';
@@ -709,11 +537,7 @@
     try {
       if (window.parent && window.parent !== window) {
         window.parent.postMessage(
-          {
-            type: 'lv_task_done',
-            status: 'completed',
-            mode: factorMode
-          },
+          { type: 'lv_task_done', status: 'completed', kind: 'schriftliche_multiplikation_3x2' },
           '*'
         );
       }
@@ -722,15 +546,15 @@
     }
   }
 
-  /* --- Events --- */
+  /* Events */
 
   newBtn.addEventListener('click', generateProblem);
   checkBtn.addEventListener('click', checkSolution);
   doneBtn.addEventListener('click', markDone);
 
-  // Initialisierung
   buildDigitButtons();
   setupInputClicks();
+  generateProblem();
 </script>
 </body>
 </html>
