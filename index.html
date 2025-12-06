@@ -32,8 +32,14 @@
     .subtitle {
       text-align: center;
       color: #4b5563;
-      margin-bottom: 1.2rem;
+      margin-bottom: 0.8rem;
       font-size: 0.9rem;
+    }
+    .task-line {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
     }
 
     .layout {
@@ -42,7 +48,6 @@
       gap: 0.15rem;
       align-items: center;
       justify-content: center;
-      margin-top: 0.6rem;
     }
     .label-cell {
       text-align: right;
@@ -54,10 +59,6 @@
       text-align: center;
       font-size: 1.3rem;
       min-height: 2rem;
-    }
-    .digit-static {
-      display: inline-block;
-      min-width: 2rem;
     }
     .line-row {
       grid-column: 1 / span 6;
@@ -211,30 +212,15 @@
 <div class="app">
   <h1>Schriftliche Multiplikation</h1>
   <div class="subtitle">
-    Dreistellige Zahl · zweistellige Zahl – wie bei matheaufgaben.net<br>
-    Trage die Zwischenprodukte, Behaltezahlen und das Ergebnis ein.
+    Dreistellige Zahl · zweistellige Zahl – Zwischenprodukte, Behalte und Ergebnis üben.
   </div>
 
+  <!-- Oberste Zeile: Aufgabe in EINER Zeile -->
+  <div class="task-line" id="task-line"></div>
+
+  <!-- Darunter NUR Eingabefelder -->
   <div class="layout">
-    <!-- Zeile 1: Faktoren untereinander -->
-    <div class="label-cell"></div>
-    <div class="digit-cell"><span class="digit-static" id="op1-0"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op1-1"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op1-2"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op1-3"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op1-4"></span></div>
-
-    <div class="label-cell">·</div>
-    <div class="digit-cell"><span class="digit-static" id="op2-0"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op2-1"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op2-2"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op2-3"></span></div>
-    <div class="digit-cell"><span class="digit-static" id="op2-4"></span></div>
-
-    <!-- Strich über den Zwischenprodukten -->
-    <div class="line-row"></div>
-
-    <!-- Zeile 3: Zwischenprodukt (Einserstelle des Faktors) -->
+    <!-- Zeile 1: Zwischenprodukt (Einserstelle des Faktors) -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit p1-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit p1-input" data-col="1" readonly></div>
@@ -242,7 +228,7 @@
     <div class="digit-cell"><input class="input-digit p1-input" data-col="3" readonly></div>
     <div class="digit-cell"><input class="input-digit p1-input" data-col="4" readonly></div>
 
-    <!-- Zeile 4: Zwischenprodukt (Zehnerstelle, um eine Stelle nach links versetzt) -->
+    <!-- Zeile 2: Zwischenprodukt (Zehnerstelle – stellenversetzt) -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit p2-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit p2-input" data-col="1" readonly></div>
@@ -250,7 +236,7 @@
     <div class="digit-cell"><input class="input-digit p2-input" data-col="3" readonly></div>
     <div class="digit-cell"><input class="input-digit p2-input" data-col="4" readonly></div>
 
-    <!-- Zeile 5: Behaltezahlen der Addition (klein, keine Einerstelle) -->
+    <!-- Zeile 3: Behaltezahlen der Addition (klein, keine Einerstelle) -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit carry-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit carry-input" data-col="1" readonly></div>
@@ -261,7 +247,7 @@
     <!-- Strich über dem Endergebnis -->
     <div class="line-row"></div>
 
-    <!-- Zeile 6: Endergebnis -->
+    <!-- Zeile 4: Endergebnis -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit res-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit res-input" data-col="1" readonly></div>
@@ -291,23 +277,18 @@
 </div>
 
 <script>
-  const NUM_COLS = 5; // wir begrenzen auf fünf Stellen (bis 19999)
+  const NUM_COLS = 5; // bis max. 19999
 
   let factor1 = 0;       // dreistellig
   let factor2 = 0;       // zweistellig
   let partial1Digits = [];
   let partial2Digits = [];
-  let carryDigits = [];  // Behaltezahlen Addition
+  let carryDigits = [];
   let resultDigits = [];
 
   let activeInput = null;
 
-  const op1Spans = [...Array(NUM_COLS)].map((_, i) =>
-    document.getElementById('op1-' + i)
-  );
-  const op2Spans = [...Array(NUM_COLS)].map((_, i) =>
-    document.getElementById('op2-' + i)
-  );
+  const taskLine = document.getElementById('task-line');
 
   const p1Inputs = Array.from(document.querySelectorAll('.p1-input'));
   const p2Inputs = Array.from(document.querySelectorAll('.p2-input'));
@@ -337,22 +318,6 @@
       n = Math.floor(n / 10);
     }
     return arr;
-  }
-
-  function digitsCount(num) {
-    if (num === 0) return 1;
-    let n = Math.floor(Math.abs(num));
-    let c = 0;
-    while (n > 0) { n = Math.floor(n / 10); c++; }
-    return c;
-  }
-
-  function displayStaticDigits(spans, digits, numberValue) {
-    for (let i = 0; i < NUM_COLS; i++) {
-      const isLeadingZero =
-        digits[i] === 0 && i < NUM_COLS - digitsCount(numberValue);
-      spans[i].textContent = isLeadingZero ? '' : digits[i];
-    }
   }
 
   function resetInputs() {
@@ -414,22 +379,18 @@
   function generateProblem() {
     let product;
     do {
-      factor1 = randomInt(100, 999);  // dreistellig
-      factor2 = randomInt(10, 99);    // zweistellig
+      factor1 = randomInt(100, 999);  // 3-stellig
+      factor2 = randomInt(10, 99);    // 2-stellig
       product = factor1 * factor2;
     } while (product > 19999);
 
-    const d1 = digitsOf(factor1);
-    const d2 = digitsOf(factor2);
-
-    displayStaticDigits(op1Spans, d1, factor1);
-    displayStaticDigits(op2Spans, d2, factor2);
+    taskLine.textContent = factor1 + ' · ' + factor2;
 
     const ones = factor2 % 10;
     const tens = Math.floor(factor2 / 10);
 
     const partial1 = factor1 * ones;
-    const partial2 = factor1 * tens * 10;
+    const partial2 = factor1 * tens * 10; // stellenversetzt
 
     partial1Digits = digitsOf(partial1);
     partial2Digits = digitsOf(partial2);
@@ -442,9 +403,7 @@
     let carryIn = 0;
     for (let i = NUM_COLS - 1; i >= 0; i--) {
       const s = partial1Digits[i] + partial2Digits[i] + carryIn;
-      const digit = s % 10;
       const carryOut = Math.floor(s / 10);
-      resultDigits[i] = digitsOf(sum)[i];
       if (i - 1 >= 0) {
         carryDigits[i - 1] = carryOut;
       }
@@ -489,7 +448,7 @@
       }
     });
 
-    // Behaltezahlen Addition
+    // Behaltezahlen
     carryInputs.forEach(inp => {
       const col = parseInt(inp.getAttribute('data-col'), 10);
       const expected = carryDigits[col];
