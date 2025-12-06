@@ -38,30 +38,31 @@
 
     .task-line {
       text-align: center;
-      font-size: 1.8rem;   /* größer wie gewünscht */
+      font-size: 1.7rem;   /* gross wie gewünscht */
       font-weight: 700;
       margin-bottom: 0.6rem;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: auto repeat(6, 2.4rem);
+      grid-template-columns: auto repeat(5, 2.4rem);
       gap: 0.12rem;
       align-items: center;
       justify-content: center;
     }
     .label-cell {
       text-align: right;
-      padding-right: 0.3rem;
-      font-size: 0.9rem;
-      color: #6b7280;
+      padding-right: 0.4rem;
+      font-size: 1.2rem;
+      color: #111827;
+      min-height: 2rem;
     }
     .digit-cell {
       text-align: center;
       font-size: 1.2rem;
       min-height: 2rem;
     }
-    .factor-digit {
+    .factor2-digit {
       font-size: 1.3rem;
       font-weight: 600;
     }
@@ -93,7 +94,7 @@
     }
 
     .line-row {
-      grid-column: 1 / span 7;
+      grid-column: 1 / span 6;
       border-bottom: 2px solid #111827;
       margin: 0.15rem 0;
     }
@@ -190,19 +191,19 @@
   <h1>Schriftliche Multiplikation</h1>
   <div class="subtitle">2-stelliger Faktor × 4-stelliger Faktor</div>
 
-  <!-- Aufgabe groß in einer Zeile -->
+  <!-- Aufgabe gross zur Orientierung -->
   <div class="task-line" id="task-line"></div>
 
-  <!-- Raster mit zweitem Faktor oben über den Kästchen -->
+  <!-- Raster: links 1. Faktor, darüber 2. Faktor über den Spalten -->
   <div class="layout">
-    <!-- Zeile 1: Ziffern des zweiten Faktors (4-stellig), stellengetreu über den Kästchen -->
-    <div class="label-cell"></div>
-    <div class="digit-cell factor-digit" id="f2-0"></div>
-    <div class="digit-cell factor-digit" id="f2-1"></div>
-    <div class="digit-cell factor-digit" id="f2-2"></div>
-    <div class="digit-cell factor-digit" id="f2-3"></div>
-    <div class="digit-cell factor-digit" id="f2-4"></div>
-    <div class="digit-cell factor-digit" id="f2-5"></div>
+
+    <!-- Zeile 1: erster Faktor links, zweiter Faktor stellengetreu über den Spalten -->
+    <div class="label-cell" id="factor1-cell"></div>
+    <div class="digit-cell factor2-digit" id="f2-0"></div>
+    <div class="digit-cell factor2-digit" id="f2-1"></div>
+    <div class="digit-cell factor2-digit" id="f2-2"></div>
+    <div class="digit-cell factor2-digit" id="f2-3"></div>
+    <div class="digit-cell factor2-digit" id="f2-4"></div>
 
     <!-- Zeile 2: Zwischenprodukt 1 (Einserstelle des 1. Faktors) -->
     <div class="label-cell"></div>
@@ -211,24 +212,21 @@
     <input class="input-digit p1" data-col="2" readonly>
     <input class="input-digit p1" data-col="3" readonly>
     <input class="input-digit p1" data-col="4" readonly>
-    <input class="input-digit p1" data-col="5" readonly>
 
-    <!-- Zeile 3: Zwischenprodukt 2 (Zehnerstelle – stellenversetzt) -->
+    <!-- Zeile 3: Zwischenprodukt 2 (Zehnerstelle, um eine Stelle nach links versetzt) -->
     <div class="label-cell"></div>
     <input class="input-digit p2" data-col="0" readonly>
     <input class="input-digit p2" data-col="1" readonly>
     <input class="input-digit p2" data-col="2" readonly>
     <input class="input-digit p2" data-col="3" readonly>
     <input class="input-digit p2" data-col="4" readonly>
-    <input class="input-digit p2" data-col="5" readonly>
 
-    <!-- Zeile 4: Behaltezahlen der Addition (klein, keine Einerstelle) -->
+    <!-- Zeile 4: Behaltezahlen (Addition), keine Einerstelle -->
     <div class="label-cell"></div>
     <input class="input-digit carry-input c" data-col="0" readonly>
     <input class="input-digit carry-input c" data-col="1" readonly>
     <input class="input-digit carry-input c" data-col="2" readonly>
     <input class="input-digit carry-input c" data-col="3" readonly>
-    <input class="input-digit carry-input c" data-col="4" readonly>
     <div></div>
 
     <!-- Strich -->
@@ -241,7 +239,6 @@
     <input class="input-digit r" data-col="2" readonly>
     <input class="input-digit r" data-col="3" readonly>
     <input class="input-digit r" data-col="4" readonly>
-    <input class="input-digit r" data-col="5" readonly>
   </div>
 
   <div class="buttons-row">
@@ -264,7 +261,7 @@
 </div>
 
 <script>
-  const NUM_COLS = 6; // Ergebnis bis 6-stellig (max 999999)
+  const NUM_COLS = 5; // bis 99 999
 
   let factor1 = 0;       // 2-stellig
   let factor2 = 0;       // 4-stellig
@@ -276,6 +273,7 @@
   let activeInput = null;
 
   const taskLine = document.getElementById('task-line');
+  const factor1Cell = document.getElementById('factor1-cell');
   const f2Cells = [...Array(NUM_COLS)].map((_, i) =>
     document.getElementById('f2-' + i)
   );
@@ -356,16 +354,15 @@
     });
   }
 
+  // Zweiter Faktor (vierstellig) soll über den 4 rechten Spalten stehen.
   function displaySecondFactorDigits() {
-    // Zweiter Faktor ist 4-stellig, soll über den rechten 4 Kästchen stehen.
-    // Spalten 0 und 1 bleiben leer, Spalten 2..5 enthalten Tausender..Einer.
     const str = factor2.toString().padStart(4, '0');
-    const d = str.split('').map(ch => parseInt(ch, 10));
+    const digs = str.split('').map(ch => parseInt(ch, 10));
     for (let col = 0; col < NUM_COLS; col++) {
-      if (col < 2) {
-        f2Cells[col].textContent = '';
+      if (col < NUM_COLS - 4) {
+        f2Cells[col].textContent = '';       // linke "freie" Spalte
       } else {
-        f2Cells[col].textContent = d[col - 2];
+        f2Cells[col].textContent = digs[col - (NUM_COLS - 4)];
       }
     }
   }
@@ -376,9 +373,10 @@
       factor1 = randomInt(10, 99);      // zweistellig
       factor2 = randomInt(1000, 9999);  // vierstellig
       product = factor1 * factor2;
-    } while (product > 999999); // damit 6-stellig reicht
+    } while (product > 99999); // Ergebnis 5-stellig begrenzen
 
     taskLine.textContent = factor1 + ' · ' + factor2;
+    factor1Cell.textContent = factor1 + ' ·'; // links ausserhalb der Spalten
     displaySecondFactorDigits();
 
     const ones = factor1 % 10;
