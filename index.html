@@ -35,12 +35,6 @@
       margin-bottom: 0.8rem;
       font-size: 0.9rem;
     }
-    .task-line {
-      text-align: center;
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 0.6rem;
-    }
 
     .layout {
       display: grid;
@@ -48,6 +42,13 @@
       gap: 0.15rem;
       align-items: center;
       justify-content: center;
+    }
+    .task-row {
+      grid-column: 1 / span 6;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
     }
     .label-cell {
       text-align: right;
@@ -65,6 +66,15 @@
       border-bottom: 2px solid #111827;
       margin-top: 0.15rem;
     }
+
+    .place-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .place-label.t { color: #22c55e; }  /* grün */
+    .place-label.h { color: #ef4444; }  /* rot   */
+    .place-label.z { color: #3b82f6; }  /* blau  */
+    .place-label.e { color: #22c55e; }  /* grün  */
 
     .input-digit {
       width: 2.1rem;
@@ -115,18 +125,9 @@
       color: #111827;
       transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.05s ease, border-color 0.15s ease;
     }
-    .btn-primary {
-      background: #2563eb;
-      border-color: #2563eb;
-      color: #ffffff;
-    }
     .btn:hover {
       background: #e5e7eb;
       border-color: #9ca3af;
-    }
-    .btn-primary:hover {
-      background: #1d4ed8;
-      border-color: #1d4ed8;
     }
     .btn:active {
       transform: translateY(1px);
@@ -212,15 +213,22 @@
 <div class="app">
   <h1>Schriftliche Multiplikation</h1>
   <div class="subtitle">
-    Dreistellige Zahl · zweistellige Zahl – Zwischenprodukte, Behalte und Ergebnis üben.
+    Dreistellige Zahl · zweistellige Zahl – Zwischenprodukte, Behaltezahlen und Ergebnis üben.
   </div>
 
-  <!-- Oberste Zeile: Aufgabe in EINER Zeile -->
-  <div class="task-line" id="task-line"></div>
-
-  <!-- Darunter NUR Eingabefelder -->
   <div class="layout">
-    <!-- Zeile 1: Zwischenprodukt (Einserstelle des Faktors) -->
+    <!-- Zeile 0: Aufgabe in EINER Zeile -->
+    <div class="task-row" id="task-line"></div>
+
+    <!-- Zeile 1: Stellenwerte THZE (bunt) -->
+    <div class="label-cell"></div>
+    <div class="digit-cell"></div>
+    <div class="digit-cell"><span class="place-label t">T</span></div>
+    <div class="digit-cell"><span class="place-label h">H</span></div>
+    <div class="digit-cell"><span class="place-label z">Z</span></div>
+    <div class="digit-cell"><span class="place-label e">E</span></div>
+
+    <!-- Zeile 2: Zwischenprodukt (Einserstelle des Faktors) -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit p1-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit p1-input" data-col="1" readonly></div>
@@ -228,7 +236,7 @@
     <div class="digit-cell"><input class="input-digit p1-input" data-col="3" readonly></div>
     <div class="digit-cell"><input class="input-digit p1-input" data-col="4" readonly></div>
 
-    <!-- Zeile 2: Zwischenprodukt (Zehnerstelle – stellenversetzt) -->
+    <!-- Zeile 3: Zwischenprodukt (Zehnerstelle – stellenversetzt) -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit p2-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit p2-input" data-col="1" readonly></div>
@@ -236,18 +244,18 @@
     <div class="digit-cell"><input class="input-digit p2-input" data-col="3" readonly></div>
     <div class="digit-cell"><input class="input-digit p2-input" data-col="4" readonly></div>
 
-    <!-- Zeile 3: Behaltezahlen der Addition (klein, keine Einerstelle) -->
+    <!-- Zeile 4: Behaltezahlen der Addition (klein, keine Einerstelle) -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit carry-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit carry-input" data-col="1" readonly></div>
     <div class="digit-cell"><input class="input-digit carry-input" data-col="2" readonly></div>
     <div class="digit-cell"><input class="input-digit carry-input" data-col="3" readonly></div>
-    <div class="digit-cell"><!-- keine Behalte bei Einern --></div>
+    <div class="digit-cell"></div>
 
     <!-- Strich über dem Endergebnis -->
     <div class="line-row"></div>
 
-    <!-- Zeile 4: Endergebnis -->
+    <!-- Zeile 5: Endergebnis -->
     <div class="label-cell"></div>
     <div class="digit-cell"><input class="input-digit res-input" data-col="0" readonly></div>
     <div class="digit-cell"><input class="input-digit res-input" data-col="1" readonly></div>
@@ -384,6 +392,7 @@
       product = factor1 * factor2;
     } while (product > 19999);
 
+    // Aufgabe oben in einer Zeile
     taskLine.textContent = factor1 + ' · ' + factor2;
 
     const ones = factor2 % 10;
