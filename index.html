@@ -38,14 +38,14 @@
 
     .task-line {
       text-align: center;
-      font-size: 1.7rem;   /* gross wie gewünscht */
+      font-size: 1.8rem;
       font-weight: 700;
       margin-bottom: 0.6rem;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: auto repeat(5, 2.4rem);
+      grid-template-columns: auto repeat(6, 2.4rem);
       gap: 0.12rem;
       align-items: center;
       justify-content: center;
@@ -94,7 +94,7 @@
     }
 
     .line-row {
-      grid-column: 1 / span 6;
+      grid-column: 1 / span 7;
       border-bottom: 2px solid #111827;
       margin: 0.15rem 0;
     }
@@ -194,51 +194,56 @@
   <!-- Aufgabe gross zur Orientierung -->
   <div class="task-line" id="task-line"></div>
 
-  <!-- Raster: links 1. Faktor, darüber 2. Faktor über den Spalten -->
+  <!-- Raster: erste Zeile Multiplikationsaufgabe, danach nur Eingabefelder -->
   <div class="layout">
 
-    <!-- Zeile 1: erster Faktor links, zweiter Faktor stellengetreu über den Spalten -->
+    <!-- Zeile 1: erster Faktor links, zweiter Faktor 4-stellig über den Spalten -->
     <div class="label-cell" id="factor1-cell"></div>
     <div class="digit-cell factor2-digit" id="f2-0"></div>
     <div class="digit-cell factor2-digit" id="f2-1"></div>
     <div class="digit-cell factor2-digit" id="f2-2"></div>
     <div class="digit-cell factor2-digit" id="f2-3"></div>
     <div class="digit-cell factor2-digit" id="f2-4"></div>
+    <div class="digit-cell factor2-digit" id="f2-5"></div>
 
-    <!-- Zeile 2: Zwischenprodukt 1 (Einserstelle des 1. Faktors) -->
+    <!-- Zeile 2: Zwischenprodukt 1 (Einserstelle) – ohne Hunderttausender-Spalte -->
     <div class="label-cell"></div>
-    <input class="input-digit p1" data-col="0" readonly>
-    <input class="input-digit p1" data-col="1" readonly>
-    <input class="input-digit p1" data-col="2" readonly>
-    <input class="input-digit p1" data-col="3" readonly>
-    <input class="input-digit p1" data-col="4" readonly>
+    <div class="digit-cell"></div> <!-- keine Eingabe in Spalte 0 -->
+    <div class="digit-cell"></div> <!-- keine Eingabe in Spalte 1 -->
+    <div class="digit-cell"><input class="input-digit p1" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit p1" data-col="3" readonly></div>
+    <div class="digit-cell"><input class="input-digit p1" data-col="4" readonly></div>
+    <div class="digit-cell"><input class="input-digit p1" data-col="5" readonly></div>
 
-    <!-- Zeile 3: Zwischenprodukt 2 (Zehnerstelle, um eine Stelle nach links versetzt) -->
+    <!-- Zeile 3: Zwischenprodukt 2 (Zehnerstelle) – ohne Einer-Spalte -->
     <div class="label-cell"></div>
-    <input class="input-digit p2" data-col="0" readonly>
-    <input class="input-digit p2" data-col="1" readonly>
-    <input class="input-digit p2" data-col="2" readonly>
-    <input class="input-digit p2" data-col="3" readonly>
-    <input class="input-digit p2" data-col="4" readonly>
+    <div class="digit-cell"><input class="input-digit p2" data-col="0" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2" data-col="1" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2" data-col="3" readonly></div>
+    <div class="digit-cell"><input class="input-digit p2" data-col="4" readonly></div>
+    <div class="digit-cell"></div> <!-- keine Eingabe in Spalte 5 -->
 
-    <!-- Zeile 4: Behaltezahlen (Addition), keine Einerstelle -->
+    <!-- Zeile 4: Behaltezahlen (Addition) – keine Einer-Spalte -->
     <div class="label-cell"></div>
-    <input class="input-digit carry-input c" data-col="0" readonly>
-    <input class="input-digit carry-input c" data-col="1" readonly>
-    <input class="input-digit carry-input c" data-col="2" readonly>
-    <input class="input-digit carry-input c" data-col="3" readonly>
-    <div></div>
+    <div class="digit-cell"><input class="input-digit carry-input c" data-col="0" readonly></div>
+    <div class="digit-cell"><input class="input-digit carry-input c" data-col="1" readonly></div>
+    <div class="digit-cell"><input class="input-digit carry-input c" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit carry-input c" data-col="3" readonly></div>
+    <div class="digit-cell"><input class="input-digit carry-input c" data-col="4" readonly></div>
+    <div class="digit-cell"></div>
 
     <!-- Strich -->
     <div class="line-row"></div>
 
-    <!-- Zeile 5: Endergebnis -->
+    <!-- Zeile 5: Endergebnis (6 Stellen) -->
     <div class="label-cell"></div>
-    <input class="input-digit r" data-col="0" readonly>
-    <input class="input-digit r" data-col="1" readonly>
-    <input class="input-digit r" data-col="2" readonly>
-    <input class="input-digit r" data-col="3" readonly>
-    <input class="input-digit r" data-col="4" readonly>
+    <div class="digit-cell"><input class="input-digit r" data-col="0" readonly></div>
+    <div class="digit-cell"><input class="input-digit r" data-col="1" readonly></div>
+    <div class="digit-cell"><input class="input-digit r" data-col="2" readonly></div>
+    <div class="digit-cell"><input class="input-digit r" data-col="3" readonly></div>
+    <div class="digit-cell"><input class="input-digit r" data-col="4" readonly></div>
+    <div class="digit-cell"><input class="input-digit r" data-col="5" readonly></div>
   </div>
 
   <div class="buttons-row">
@@ -261,7 +266,7 @@
 </div>
 
 <script>
-  const NUM_COLS = 5; // bis 99 999
+  const NUM_COLS = 6; // Ergebnis bis 6-stellig (max 989901 bei 99×9999)
 
   let factor1 = 0;       // 2-stellig
   let factor2 = 0;       // 4-stellig
@@ -272,23 +277,23 @@
 
   let activeInput = null;
 
-  const taskLine = document.getElementById('task-line');
+  const taskLine    = document.getElementById('task-line');
   const factor1Cell = document.getElementById('factor1-cell');
-  const f2Cells = [...Array(NUM_COLS)].map((_, i) =>
+  const f2Cells     = [...Array(NUM_COLS)].map((_, i) =>
     document.getElementById('f2-' + i)
   );
 
-  const p1Inputs = Array.from(document.querySelectorAll('.p1'));
-  const p2Inputs = Array.from(document.querySelectorAll('.p2'));
+  const p1Inputs    = Array.from(document.querySelectorAll('.p1'));
+  const p2Inputs    = Array.from(document.querySelectorAll('.p2'));
   const carryInputs = Array.from(document.querySelectorAll('.c'));
-  const resInputs = Array.from(document.querySelectorAll('.r'));
+  const resInputs   = Array.from(document.querySelectorAll('.r'));
 
-  const newBtn = document.getElementById('new-btn');
-  const checkBtn = document.getElementById('check-btn');
-  const feedbackEl = document.getElementById('feedback');
+  const newBtn      = document.getElementById('new-btn');
+  const checkBtn    = document.getElementById('check-btn');
+  const feedbackEl  = document.getElementById('feedback');
 
-  const popupOverlay = document.getElementById('popup-overlay');
-  const digitGrid = document.getElementById('digit-grid');
+  const popupOverlay  = document.getElementById('popup-overlay');
+  const digitGrid     = document.getElementById('digit-grid');
   const popupCloseBtn = document.getElementById('popup-close-btn');
 
   function randomInt(min, max) {
@@ -313,6 +318,8 @@
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
   }
+
+  /* Popup */
 
   function buildDigitButtons() {
     digitGrid.innerHTML = '';
@@ -354,13 +361,13 @@
     });
   }
 
-  // Zweiter Faktor (vierstellig) soll über den 4 rechten Spalten stehen.
+  // Zweiter Faktor (vierstellig) über den 4 rechten Spalten (Spalten 2–5)
   function displaySecondFactorDigits() {
-    const str = factor2.toString().padStart(4, '0');
+    const str  = factor2.toString().padStart(4, '0');
     const digs = str.split('').map(ch => parseInt(ch, 10));
     for (let col = 0; col < NUM_COLS; col++) {
       if (col < NUM_COLS - 4) {
-        f2Cells[col].textContent = '';       // linke "freie" Spalte
+        f2Cells[col].textContent = '';          // Spalten 0–1 leer
       } else {
         f2Cells[col].textContent = digs[col - (NUM_COLS - 4)];
       }
@@ -368,22 +375,21 @@
   }
 
   function generateProblem() {
-    let product;
-    do {
-      factor1 = randomInt(10, 99);      // zweistellig
-      factor2 = randomInt(1000, 9999);  // vierstellig
-      product = factor1 * factor2;
-    } while (product > 99999); // Ergebnis 5-stellig begrenzen
+    // alle 2-stellig × 4-stellig haben Produkt < 1 000 000, also immer 6-stellig oder weniger
+    factor1 = randomInt(10, 99);
+    factor2 = randomInt(1000, 9999);
 
-    taskLine.textContent = factor1 + ' · ' + factor2;
-    factor1Cell.textContent = factor1 + ' ·'; // links ausserhalb der Spalten
+    const product = factor1 * factor2;
+
+    taskLine.textContent   = factor1 + ' · ' + factor2;
+    factor1Cell.textContent = factor1 + ' ·';
     displaySecondFactorDigits();
 
     const ones = factor1 % 10;
     const tens = Math.floor(factor1 / 10);
 
-    const partial1 = factor2 * ones;
-    const partial2 = factor2 * tens * 10; // Zehnerstelle, um eine Stelle verschoben
+    const partial1 = factor2 * ones;        // Einser-Zwischenprodukt
+    const partial2 = factor2 * tens * 10;   // Zehner-Zwischenprodukt (verschoben)
 
     partial1Digits = digitsOf(partial1);
     partial2Digits = digitsOf(partial2);
@@ -391,6 +397,7 @@
     const sum = partial1 + partial2;
     resultDigits = digitsOf(sum);
 
+    // Behaltezahlen für die Addition der Zwischenprodukte
     carryDigits = new Array(NUM_COLS).fill(0);
     let carryIn = 0;
     for (let i = NUM_COLS - 1; i >= 0; i--) {
@@ -408,6 +415,7 @@
   function checkSolution() {
     let allCorrect = true;
 
+    // Zwischenprodukt 1 (nur Spalten 2–5)
     p1Inputs.forEach(inp => {
       const col = parseInt(inp.dataset.col, 10);
       const expected = partial1Digits[col];
@@ -421,6 +429,7 @@
       }
     });
 
+    // Zwischenprodukt 2 (Spalten 0–4)
     p2Inputs.forEach(inp => {
       const col = parseInt(inp.dataset.col, 10);
       const expected = partial2Digits[col];
@@ -434,6 +443,7 @@
       }
     });
 
+    // Behaltezahlen (Spalten 0–4)
     carryInputs.forEach(inp => {
       const col = parseInt(inp.dataset.col, 10);
       const expected = carryDigits[col];
@@ -447,6 +457,7 @@
       }
     });
 
+    // Ergebnis (Spalten 0–5)
     resInputs.forEach(inp => {
       const col = parseInt(inp.dataset.col, 10);
       const expected = resultDigits[col];
